@@ -2,7 +2,9 @@
 # build a 15x20 matrix containing the reviews made on 20 movies by 15 users.
 # We'll use this matrix in the next lesson to build a recommendation system.
 
-#First, we select the 15 users we want to use. I've chosen to use 15 users with moderately frequent viewing habits (remember there are 700 users and 9000 movies), mainly to make sure there are some (but not too many) empty ratings.
+#First, we select the 15 users we want to use. I've chosen to use 15 users
+# with moderately frequent viewing habits (remember there are 700 users
+#  and 9000 movies), mainly to make sure there are some (but not too many) empty ratings.
 
 users_frq <- ratings %>% group_by(userId) %>% summarize(count = n()) %>% arrange(desc(count))
 my_users <- users_frq$userId[101:115]
@@ -30,12 +32,14 @@ head(levels(ratings_red$title))
 ratings_red <- droplevels(ratings_red)
 levels(ratings_red$title)
 
-#We now want to reshape the data frame into a 15x20 matrix i.e.from "long" format to "wide" format.
+#We now want to reshape the data frame into a 15x20 matrix
+# i.e.from "long" format to "wide" format.
 # We can do this using the spread() verb.
 ratings_red %>% spread(key = movieId, value = rating)
 
-#The preceding line doesn't work: as you can see we land up with more than one row per user.
-# But it is useful as an illustration of spread(). Question: why doesn't it work?
+#The preceding line doesn't work: as you can see we land up with more than
+#one row per user.But it is useful as an illustration of spread().
+# Question: why doesn't it work? ANS: Got something to do with genres...
 
 #Here's the corrected version:
 ratings_red %>% select(userId,title,rating) %>% spread(key = title, value = rating)
